@@ -3,47 +3,48 @@ package ru.javamentor.springmvc.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javamentor.springmvc.dao.UserDao;
 import ru.javamentor.springmvc.model.User;
+import ru.javamentor.springmvc.repositories.UserRepository;
 
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    public UserDao userDao;
+    UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Transactional
     @Override
     public void addUser(User user) {
-        userDao.addUser(user);
+        userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<User> getAllUsers() {
-        return userDao.getAllUsers();
+        return userRepository.findAll();
     }
 
     @Transactional(readOnly = true)
     @Override
     public User getUser(long id) {
-        return userDao.getUser(id);
+        return userRepository.getById(id);
+
     }
 
     @Transactional
     @Override
     public void deleteUser(long id) {
-        userDao.deleteUser(id);
+        userRepository.deleteById(id);
     }
 
     @Transactional
     @Override
     public void updateUser(User user) {
-        userDao.updateUser(user);
+        userRepository.save(user);
     }
 }
